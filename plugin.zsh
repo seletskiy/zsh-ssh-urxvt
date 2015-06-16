@@ -22,9 +22,3 @@ function ssh-urxvt() {
     # check terminal is known, if not, fallback to xterm
     \ssh -t "$@" "infocmp >/dev/null 2>&1 || export TERM=xterm; LANG=$LANG \$SHELL"
 }
-
-function _ssh-urxvt() {
-    service="ssh" _ssh "${@}"
-}
-
-compdef _ssh-urxvt ssh-urxvt

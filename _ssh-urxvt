@@ -1,0 +1,7 @@
+#compdef ssh-urxvt
+
+function _ssh-urxvt() {
+    service="ssh" _ssh "${@}"
+}
+
+_ssh-urxvt "${@}"
