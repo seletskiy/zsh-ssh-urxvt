@@ -13,7 +13,7 @@ function ssh-urxvt() {
             flags=($flags -$opt$OPTARG)
         done
 
-        shift $(( $OPTIND - 1))
+        shift $(( $OPTIND - 1 ))
 
         if [ $# -gt 0 ]; then
             positionals=($positionals "$1")
@@ -34,6 +34,6 @@ function ssh-urxvt() {
     fi
 
     # check terminal is known, if not, fallback to xterm
-    \ssh -t "$flags" "$positionals" \
+    \ssh -t "${flags[@]}" "$positionals" \
         "infocmp >/dev/null 2>&1 || export TERM=xterm; LANG=$LANG \$SHELL"
 }
