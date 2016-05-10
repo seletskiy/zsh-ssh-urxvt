@@ -13,25 +13,37 @@ function ssh-urxvt() {
     local interactive
     local opts
 
-    # parse ssh options and split flags from positional arguments
-    zparseopts -a opts -D \
-        'b:' 'c:' 'D:' 'E:' 'e:' 'F:' 'I:' 'i:' 'L:' 'l:' 'm:' 'O:' 'o:' \
-            'p:' 'Q:' 'R:' 'S:' 'W:' 'w:' \
-        '1' '2' '4' '6' 'A' 'a' 'C' 'f' 'G' 'g' 'K' 'k' 'M' 'N' 'n' 'q' 's' \
-            'T' 'V' 'v' 'X' 'x' 'Y' 'y' \
-            't=interactive'
+    local hostname
+    while [ ! "$hostname" ]; do
+        # parse ssh options and split flags from positional arguments
+        zparseopts -a opts -D \
+            'b:' 'c:' 'D:' 'E:' 'e:' 'F:' 'I:' 'i:' 'L:' 'l:' 'm:' 'O:' 'o:' \
+                'p:' 'Q:' 'R:' 'S:' 'W:' 'w:' \
+            '1' '2' '4' '6' 'A' 'a' 'C' 'f' 'G' 'g' 'K' 'k' 'M' 'N' 'n' 'q' 's' \
+                'T' 'V' 'v' 'X' 'x' 'Y' 'y' \
+                't=interactive'
+
+        hostname="$1"
+        if [ ! "$hostname" ]; then
+            echo smart-ssh: hostname is not specified
+            command ssh
+            return $?
+        fi
+
+        shift
+    done
 
     local shell='$SHELL'
     if [ $# -ge 2 ]; then
         if [ "$interactive" ]; then
-            shell+=" -ic ${(q)${(qqq@)@:2}}"
+            shell+=" -ic ${(q)${(qqq@)@:1}}"
         else
-            command ssh "${opts[@]}" "$@"
+            command ssh "$hostname" "${opts[@]}" "$@"
             return $?
         fi
     fi
 
     # check terminal is known, if not, fallback to xterm
-    command ssh -t "${opts[@]}" "$1" \
+    command ssh "$hostname" -t "${opts[@]}" "$1" \
         "infocmp >/dev/null 2>&1 || export TERM=xterm; LANG=$LANG exec $shell"
 }
