@@ -34,7 +34,7 @@ function ssh-urxvt() {
     done
 
     local shell='$SHELL'
-    if [ $# -ge 2 ]; then
+    if [ $# -ge 1 ]; then
         if [ "$interactive" ]; then
             shell+=" -ic ${(q)${(qqq@)@:1}}"
         else
@@ -44,6 +44,6 @@ function ssh-urxvt() {
     fi
 
     # check terminal is known, if not, fallback to xterm
-    command ssh "$hostname" -t "${opts[@]}" "$1" \
+    command ssh "$hostname" -t "${opts[@]}" \
         "infocmp >/dev/null 2>&1 || export TERM=xterm; LANG=$LANG exec $shell"
 }
