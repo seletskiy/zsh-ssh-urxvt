@@ -14,7 +14,7 @@ function ssh-urxvt() {
     local opts
 
     local hostname
-    while [ ! "$hostname" ]; do
+    while [ ! "$hostname" -o "${1[1]}" = "-" ]; do
         # parse ssh options and split flags from positional arguments
         zparseopts -a opts -D \
             'b:' 'c:' 'D:' 'E:' 'e:' 'F:' 'I:' 'i:' 'L:' 'l:' 'm:' 'O:' 'o:' \
@@ -23,7 +23,10 @@ function ssh-urxvt() {
                 'T' 'V' 'v' 'X' 'x' 'Y' 'y' \
                 't=interactive'
 
-        hostname="$1"
+        if [ ! "$hostname" ]; then
+            hostname="$1"
+        fi
+
         if [ ! "$hostname" ]; then
             echo smart-ssh: hostname is not specified
             command ssh
