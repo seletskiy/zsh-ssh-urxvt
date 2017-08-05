@@ -44,6 +44,8 @@ function ssh-urxvt() {
             command ssh "$hostname" "${opts[@]}" "$@"
             return $?
         fi
+    else
+        shell+=' -l'
     fi
 
     # check terminal is known, if not, fallback to xterm
